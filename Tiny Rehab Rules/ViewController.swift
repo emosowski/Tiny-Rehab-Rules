@@ -95,17 +95,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         print(start.position)
         print(end.position)
         
-        let a = end.position.x - start.position.x
-        let b = end.position.y - start.position.y
-        let c = end.position.z - start.position.z
+        let a = (end.position.x - start.position.x) * 39.3701
+        let b = (end.position.y - start.position.y) * 39.3701
+        let c = (end.position.z - start.position.z) * 39.3701
         
-        let distance = sqrt(
+        let distanceInInches = sqrt(
             pow(a, 2) +
             pow(b, 2) +
             pow(c, 2)
         )
         
-        updateText(text: "\(distance)", atPosition: end.position)
+        updateText(text: "\(distanceInInches)", atPosition: end.position)
         
         //distance = √ ((x2-x1)^2 + (y2-y1)^2 + (z2-z1)^2)
         
