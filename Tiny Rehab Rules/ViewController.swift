@@ -15,6 +15,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     
     var dotNodes = [SCNNode]()
+    var textNode = SCNNode()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,7 +46,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //using optional binding to determine if touch esists on continuous surface
+        
+        if dotNodes.count >= 2 {
+            for dot in dotNodes {
+                dot.removeFromParentNode()
+            }
+            dotNodes = [SCNNode]()
+        }
+        //3rd touch even removes two previous dot nodes and initializes new SCNNode instance
+
         
         if let touchLocation = touches.first?.location(in: sceneView) {
             let hitTestResults = sceneView.hitTest(touchLocation, types: .featurePoint)
@@ -53,7 +63,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 addDot(at: hitResult)
             }
         }
-        
+        //using optional binding to determine if touch esists on continuous surface
     }
     
     func addDot(at hitResult : ARHitTestResult) {
@@ -103,11 +113,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func updateText(text: String, atPosition: SCNVector3) {
         
+        textNode.removeFromParentNode()
+        
         let textGeometry = SCNText(string: text, extrusionDepth: 1.0)
         
         textGeometry.firstMaterial?.diffuse.contents = UIColor.gray
         
-        let textNode = SCNNode(geometry: textGeometry)
+        textNode = SCNNode(geometry: textGeometry)
         
         textNode.position = SCNVector3(atPosition.x, atPosition.y + 0.01, atPosition.z)
         
